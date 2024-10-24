@@ -94,7 +94,7 @@ $endif$
 $if(maincolor)$
 \definecolor{mainColor}{HTML}{$maincolor$}
 $else$
-\definecolor{mainColor}{HTML}{01796F}
+\definecolor{mainColor}{HTML}{002854}
 $endif$
 
 
@@ -102,7 +102,10 @@ $endif$
 
 
 % Bold Vector
-\newcommand{\vet}[1]{\mathbf{\hat{#1}}}
+\newcommand{\vet}[1]{\mathbf{#1}}
+
+%% Bold Unit Vector
+\newcommand{\uvet}[1]{\mathbf{\hat{#1}}}
 
 % Comando iniciar Solução
 \newcommand{\iniSol}{

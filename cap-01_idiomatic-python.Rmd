@@ -3,13 +3,13 @@ title: "Título"
 author: "Igo da Costa Andrade"
 
 # Metadados
-booktitle: "Título do Livro"
-booksubtitle: "Subtítulo do Livro"
-bookauthors: "Autor, A.B"
-bookaddres: "Local"
-bookpublisher: "Editora"
-bookyear: "2000"
-chaptertitle: "Usando código R"
+booktitle: "Numerical Methods in Physics with Python"
+#booksubtitle: "Subtítulo do Livro"
+bookauthors: "Gezerlis, A"
+bookaddres: "Cambridge"
+bookpublisher: "Cambridge University Press"
+bookyear: "2020"
+chaptertitle: "Idiomatic Python"
 chapternumber: "1"
 
 output: 
@@ -23,6 +23,38 @@ library(reticulate)
 use_python("~/anaconda3/envs/science/bin/python")
 ```
 
+
+\section*{1.7 Projeto: Visualizando Campos Elétricos}
+
+\subsection*{1.7.1 Campo Elétrico devido a uma distribuição de cargas pontuais}
+
+\begin{enumerate}
+  \item Conforme a \textit{Lei de Coulomb}, a força elétrica sobre uma carga de teste $Q$ localizada no ponto $P$ (posição $\vet{r}$), decido a uma única carga $q_0$ localizada em $\vet{r_0}$ é dada por:
+  
+  $$
+  \vet{F_0} = k \dfrac{q_0 Q}{(\vet{r} - \vet{r_0})^2} \dfrac{\vet{r} - \vet{r_0}}{|\vet{r} - \vet{r_0}|}
+  $$
+  em que $k = 1/(4\pi \varepsilon)$ é a constante de Coulomb em unidades do SI.
+  \item O Campo elétrico produzido por $q_0$ é 
+  $$
+  \vet{E_0}(\vet{r}) = k q_0 \dfrac{\vet{r} - \vet{r_0}}{|\vet{r} - \vet{r_0}|^3}
+  $$
+  \item Consideremos um conjunto de $n$ cargas pontuais $q_0, q_1, \cdots, q_{n-1}$ localizadas em $\vet{r_0}, \vet{r_1}, \cdots, \vet{r_{n-1}}$ pode ser obtido por aplicação do \textit{Princípio de Superposição}, conforme abaixo:
+  $$
+  \vet{E}(\vet{r}) = \sum_{i = 0}^{n-1} \vet{E_i}(\vet{r}) = \sum_{i = 0}^{n-1} kq_i \dfrac{\vet{r} - \vet{r_i}}{|\vet{r} - \vet{r_i}|^3}
+  $$
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+%%%========
+\newpage
 \begin{enumerate}
   \item \textbf{(FEI-SP)} Dois móveis $A$ e $B$, ambos com movimento uniforme, percorrem uma trajetória retilínea conforme mostra a figura. Em $t = 0$, estes se encontram, respectivamente, nos pontos $A$ e $B$ na trajetória. As velocidades dos móveis são $v_A = 50$ m/s e $v_B = 30$ m/s no mesmo sentido.
   
