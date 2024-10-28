@@ -76,7 +76,7 @@ draw += rf"\filldraw ({P[0]}, {P[1]}) circle (2pt)" +  "node[right, above] {$P$}
   \end{tikzpicture}
 \end{figure}
 
-\subsubsection*{Plotando Linhas de Campo}
+\subsubsection*{Plotando Campo Elétrico de uma distribuição de cargas}
 
 ```{python VectorField, include=FALSE}
 ## VectorField
