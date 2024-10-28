@@ -34,7 +34,7 @@ use_python("~/anaconda3/envs/science/bin/python")
   $$
   \vet{F_0} = k \dfrac{q_0 Q}{(\vet{r} - \vet{r_0})^2} \dfrac{\vet{r} - \vet{r_0}}{|\vet{r} - \vet{r_0}|}
   $$
-  em que $k = 1/(4\pi \varepsilon)$ é a constante de Coulomb em unidades do SI.
+  em que $k = 1/(4\pi \epsilon_0)$ é a constante de Coulomb em unidades do SI.
   \item O Campo elétrico produzido por $q_0$ é 
   $$
   \vet{E_0}(\vet{r}) = k q_0 \dfrac{\vet{r} - \vet{r_0}}{|\vet{r} - \vet{r_0}|^3}
@@ -48,121 +48,87 @@ use_python("~/anaconda3/envs/science/bin/python")
 
 
 
+```{python chargeDistribution, include=FALSE}
+boxl = 5
+xs = [-4, -3, -2, -2, -2, -1, 1, 3, 4, 5, 4, 5, 3]
+ys = [-4, -2, -3, 2, 1, 3, 4, 1, 2, -1, -2, -3, 5]
+P = [2*boxl-1, 2*boxl-3]
 
-
-
-
-
-%%%========
-\newpage
-\begin{enumerate}
-  \item \textbf{(FEI-SP)} Dois móveis $A$ e $B$, ambos com movimento uniforme, percorrem uma trajetória retilínea conforme mostra a figura. Em $t = 0$, estes se encontram, respectivamente, nos pontos $A$ e $B$ na trajetória. As velocidades dos móveis são $v_A = 50$ m/s e $v_B = 30$ m/s no mesmo sentido.
-  
-  \begin{figure}[H]
-    \centering
-    \begin{tikzpicture}
-      \draw[-latex] (-0.5, 0) -- (8, 0);
-      \foreach \i/\x/\y/\cor in {0/0/2/black, A/2/1.5/red, B/6/2/red}{
-        \draw[dashed] (\x, 0) -- (\x, \y);
-        \draw[\cor, thick] (\x, 0.1) -- (\x, -0.1) node[below, black] {$\i$};
-      }
-      \foreach \i/\x/\y in {50/2/1.5, 150/6/2}{
-        \draw[latex-latex] (0, \y) -- (\x, \y) node[midway, above] {$\i$ m};
-      }
-    \end{tikzpicture}
-  \end{figure}
-  
-  Em que instante a distância entre os dois móveis será 50 m?
-  \begin{enumerate}[label=(\alph*)]
-    \foreach \resp in {200, 225, 250, 300, 350} {
-      \item $\resp$ m
-    }
-  \end{enumerate}
-  
-  \iniSol
-  
-
-
-  
-  Escrevamos as equações horárias das trajétórias dos móveis $A$ e $B$, sabendo que ambos descrevem movimento uniforme:
-  
-  \begin{align*}
-    \begin{cases}
-      s_A = s_{0A} + v_A t\\
-      s_B = s_{0B} + v_B t\\
-    \end{cases}
-  \end{align*}
-  
-  Os móveis encontram-se no instante $t^{*}$ tal que $s_A = s_B = s^{*}$, ou seja:
-  \begin{align*}
-    s_A = s_B &\Rightarrow s_{0A} + v_A t^{*} = s_{0B} + v_B t^{*}\\
-    &\Rightarrow v_A t^{*} - v_B t^{*} = s_{0B} - s_{0A}\\
-    &\Rightarrow (v_A  - v_B) t^{*} = s_{0B} - s_{0A}\\
-    &\Rightarrow t^{*} = \dfrac{s_{0B} - s_{0A}}{v_A  - v_B}
-  \end{align*}
-  
-  Nesse instante, a posição $s^{*}$ dos móveis será:
-  
-  \begin{align*}
-    s^{*} = s_{0A} + v_A t^{*} \Rightarrow s^{*} = s_{0A} + v_A \left( \dfrac{s_{0B} - s_{0A}}{v_A  - v_B} \right)
-  \end{align*}
-  
-  
-  O script \verb|Python| abaixo mostra o resultano numérico correspondente ao desenvolvimento algébrico acima:
-\end{enumerate}
-
-```{python}
-# Dados do problema
-s_0A = 50
-v_A = 50
-s_0B = 150
-v_B = 30
-
-# Instante do encontro
-t_star = (s_0B - s_0A) / (v_A - v_B)
-
-# Posição do encontro
-s_star = s_0A + v_A * t_star
-```
-
-
-  Os móveis encontram-se no instante $t^{*} = `r format(py$t_star, decimal.mark=",")`$ s e na posição $s^{*} = `r format(py$s_star, decimal.mark=",")`$ m.
-  
-
-  O gráfico abaixo mostra a posição de cada móvel em função do tempo, bem como o ponto de encontro.
-  
-```{python, include=FALSE}
-import numpy as np
-t = np.array([0, t_star, 1.5*t_star])
-s_A = s_0A + v_A * t
-s_B = s_0B + v_B * t
-
-t_lim = [np.min(t)-t_star/3, np.max(t)+t_star/2]
-s_lim = [-s_0A, np.max([np.max(s_A), np.max(s_B)]) + s_0A]
+draw = ""
+draw += rf"\draw[-latex] ({-boxl}, 0)--({2*boxl+1}, 0)" + "node[below] {$x$};"
+draw += rf"\draw[-latex] (0, {-boxl})--(0,{2*boxl+1})" + "node[left] {$y$};"
+draw += rf"\filldraw ({xs[0]:.2f}, {ys[0]:.2f}) circle (5pt)" + "node[left] {$q_0$};"
+draw += rf"\filldraw ({xs[-1]:.2f}, {ys[-1]:.2f}) circle (5pt)" + "node[above, yshift=2pt] {$q_i$};"
+draw += rf"\draw[-latex] (0,0)--({xs[-1]:.2f}, {ys[-1]:.2f})" + r"node[midway, left] {$\mathbf{r}_i$};"
+draw += rf"\draw[-latex, blue] (0,0)--({P[0]:.2f}, {P[1]:.2f})" + r"node[black, midway, below] {$\mathbf{r}$};"
+draw += rf"\draw[-latex, blue] (0,0)--({xs[-1]:.2f}, {ys[-1]:.2f})" + r"node[black, midway, left] {$\mathbf{r}_i$};"
+draw += rf"\draw[-latex, blue] ({xs[-1]:.2f}, {ys[-1]:.2f})--({P[0]}, {P[1]})" + r"node[black, midway, above,yshift=2pt] {$\mathbf{r}-\mathbf{r}_i$};"
+for i in range(1, len(xs)-1):
+  draw += rf"\filldraw ({xs[i]:.2f}, {ys[i]:.2f}) circle (5pt);"
+ 
+draw += rf"\filldraw ({P[0]}, {P[1]}) circle (2pt)" +  "node[right, above] {$P$};"
 ```
 
 \begin{figure}[H]
   \centering
-  \begin{tikzpicture}[x=0.5cm, y=0.01cm]
-    % Eixo X
-    \draw[-latex] (`r py$t_lim[1]`, 0) -- (`r py$t_lim[2]`, 0) node[below] {$t$ (s)};
-    % Eixo Y
-    \draw[-latex] (0, `r py$s_lim[1]`) -- (0, `r py$s_lim[2]`) node[left] {$s$ (m)};
-    % Função Horária de A
-    \draw[red, thick] (`r py$t[1]`, `r py$s_A[1]`) -- (`r py$t[3]`, `r py$s_A[3]`) node[right, yshift=5pt, black] {$\textbf{A}$};
-    \draw[thick] (4pt, `r py$s_0A`) -- (-4pt, `r py$s_0A`) node[left] {$`r py$s_0A`$};
-    % Função Horária de B
-    \draw[blue, thick] (`r py$t[1]`, `r py$s_B[1]`) -- (`r py$t[3]`, `r py$s_B[3]`) node[right, yshift=-2pt , black] {$\textbf{B}$};
-    \draw[thick] (4pt, `r py$s_0B`) -- (-4pt, `r py$s_0B`) node[left] {$`r py$s_0B`$};
-    % Ponto de encontro
-    \draw[dashed] (`r py$t_star`, 0) -- (`r py$t_star`, `r py$s_star`) -- (0, `r py$s_star`);
-    \draw[thick] (`r py$t_star`, 4pt) -- (`r py$t_star`, -4pt) node[below] {$t^{*} = `r py$t_star`$};
-    \draw[thick] (4pt, `r py$s_star`) -- (-4pt, `r py$s_star`) node[left] {$`r py$s_star`$};
+  \begin{tikzpicture}[scale=0.5]
+    `r py$draw`
   \end{tikzpicture}
 \end{figure}
 
+\subsubsection*{Plotando Linhas de Campo}
+
+```{python VectorField, include=FALSE}
+## VectorField
+import numpy as np
+from math import sqrt
+
+xs = np.linspace(-10, 10, 20)
+ys = np.linspace(-10, 10, 20)
+
+Q0s = [5, 5, -5, -5]
+x0s = [-6, 6, 0, 0]
+y0s = [0, 0, -6, 6]
+
+def campo_eletrico(Q0, x0, y0, x, y, k=1):
+  d = sqrt((x-x0)**2+(y-y0)**2)
+  Ex = k * Q0 * (x-x0) /d**3
+  Ey = k * Q0 * (y-y0) /d**3
+  return Ex, Ey
+
+def unitario(vx, vy):
+  d = sqrt(vx**2+vy**2)
+  ux, uy = vx/d, vy/d
+  return ux, uy
 
 
-Portanto, a resposta correta é letra \textbf{D}.
+draw = ""
+for xi in xs:
+  for yi in ys:
+    Exi = 0
+    Eyi = 0
+    for k in range(len(Q0s)):
+      E = campo_eletrico(Q0=Q0s[k], x0=x0s[k], y0=y0s[k], x=xi, y=yi)
+      Exi += E[0]
+      Eyi += E[1]
+    Exi, Eyi = (_ * 0.7 for _ in unitario(Exi, Eyi))
+      
+    draw += rf"\draw[-latex] ({xi:.4f}, {yi:.4f})--++({Exi:.4f}, {Eyi:.4f});"
+for k in range(len(Q0s)):
+  if Q0s[k] > 0:
+    draw += rf"\filldraw[red!60] ({x0s[k]:.4f}, {y0s[k]:.4f}) circle (15pt)" + "node[black] {$+$};"
+  else:
+    draw += rf"\filldraw[blue!60] ({x0s[k]:.4f}, {y0s[k]:.4f}) circle (15pt)" + "node[black] {$-$};"
 
-\fimSol
+draw += rf"\draw (-11, -11) rectangle (11, 11);"
+for i in range(-10, 11, 2):
+  draw += rf"\draw ({i}, -11) --++ (0, -0.25) node[below]" + "{" + rf"${i}$" + "};"
+  draw += rf"\draw (-11, {i}) --++ (-0.25, 0) node[left]" + "{" + rf"${i}$" + "};"
+```
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[scale=0.5]
+    `r py$draw`
+  \end{tikzpicture}
+\end{figure}
